@@ -1,0 +1,9 @@
+ - [ ] select aspect ratio when doing the crop
+ - [ ] fix wrong date setting with built-in editor
+ - [ ] fetch location metadata from EXIF
+ - [ ] implement image rotation
+ - [ ] implement brightness and contrast adjustment
+ - [ ] implement shadow and highlight adjustments
+ - [ ] control noise reduction
+ - [ ] add author signature
+ - [ ] download result
