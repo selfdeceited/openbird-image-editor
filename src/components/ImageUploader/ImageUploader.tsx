@@ -6,13 +6,13 @@ import {
   HintStyled,
   SpinnerStyled,
 } from "./ImageUploader.styled";
-import { acceptInputType } from "./RAW_EXTENSIONS";
+import { acceptInputType } from "../../lib/rawExtensions";
 
 interface ImageUploaderProps {
   onUpload: (image: UploadedImage) => void;
 }
 
-export default function ImageUploader({ onUpload }: ImageUploaderProps) {
+export function ImageUploader({ onUpload }: ImageUploaderProps) {
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 

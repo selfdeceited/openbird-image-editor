@@ -1,3 +1,11 @@
+# Project: OpenBird Image Editor
+
+This web application allows users to edit RAW images for birds, adjust the color, brightness, contrast, and saturation, allow to crop and rotate images, fix or add the metadata, append signature, and afterwards save the edited images along with the metadata to the backend.
+## Code Style
+
+- TypeScript strict mode, no `any` types
+- Use named exports, not default exports
+
 # Package Manager
 
 Always use `yarn` instead of `npm` for installing packages and running scripts.

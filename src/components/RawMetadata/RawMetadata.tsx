@@ -44,7 +44,7 @@ const FIELDS: Field[] = [
   },
 ];
 
-export default function RawMetadata({ metadata }: RawMetadataProps) {
+export function RawMetadata({ metadata }: RawMetadataProps) {
   return (
     <MetadataTableStyled>
       <tbody>

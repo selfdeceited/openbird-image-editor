@@ -1,8 +1,8 @@
 import { useState } from "react";
-import ImageUploader from "./components/ImageUploader";
-import ImageCanvas from "./components/ImageCanvas";
-import RawMetadata from "./components/RawMetadata";
-import { type UploadedImage } from "./components/useUploadImage";
+import { ImageUploader } from "./components/ImageUploader/ImageUploader";
+import { EditBar } from "./components/EditBar/EditBar";
+import { RawMetadata } from "./components/RawMetadata/RawMetadata";
+import { type UploadedImage } from "./components/ImageUploader/useUploadImage";
 import {
   ContainerStyled,
   PreviewStyled,
@@ -11,8 +11,9 @@ import {
 } from "./App.styled";
 import "./App.css";
 
-function App() {
-  const [image, setImage] = useState<UploadedImage | null>(null);
+export function App() {
+  const [image, setImage] = useState<UploadedImage | null>(null); // todo: not store image in state?
+
   return (
     <ContainerStyled>
       <HeaderStyled>RAW Image Editor for OpenBird</HeaderStyled>
@@ -21,12 +22,11 @@ function App() {
       {image && (
         <PreviewStyled>
           <FileNameStyled>{image.name}</FileNameStyled>
-          <ImageCanvas image={image} />
-          {image.type === "raw" && <RawMetadata metadata={image.metadata} />}
+          <EditBar image={image} onApply={setImage} />
+
+          {image.metadata && <RawMetadata metadata={image.metadata} />}
         </PreviewStyled>
       )}
     </ContainerStyled>
   );
 }
-
-export default App;

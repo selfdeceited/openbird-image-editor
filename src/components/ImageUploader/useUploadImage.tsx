@@ -4,7 +4,7 @@ import LibRaw, {
   type Metadata,
   type RawImageData,
 } from "libraw-wasm";
-import { RAW_EXTENSIONS } from "./RAW_EXTENSIONS";
+import { RAW_EXTENSIONS } from "../../lib/rawExtensions";
 
 const options: LibRawOptions = {
   bright: 1.0, // -b <float> : brightness
@@ -54,7 +54,8 @@ const options: LibRawOptions = {
 
 export type UploadedImage =
   | { type: "raw"; imageData: RawImageData; metadata: Metadata; name: string }
-  | { type: "image"; dataUrl: string; name: string };
+  | { type: "image"; dataUrl: string; metadata: Metadata | null; name: string }
+  | { type: "cropped"; metadata: Metadata | null; name: string };
 
 interface UseUploadImageProps {
   onUpload: (image: UploadedImage) => void;
@@ -74,6 +75,7 @@ async function decodeRawFile(
   const metadata = await raw.metadata();
   const imageData = await raw.imageData();
   console.log({ metadata });
+  console.log(file.lastModified);
   return { imageData, metadata };
 }
 
@@ -103,7 +105,7 @@ export function useUploadImage({ onUpload }: UseUploadImageProps) {
         onUpload({ type: "raw", imageData, metadata, name: f.name });
       } else {
         const dataUrl = await imageFileToDataUrl(f);
-        onUpload({ type: "image", dataUrl, name: f.name });
+        onUpload({ type: "image", dataUrl, name: f.name, metadata: null });
       }
     } catch (err) {
       console.error(err);

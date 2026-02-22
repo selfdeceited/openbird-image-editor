@@ -1,13 +1,14 @@
-import { useEffect, useRef } from "react";
-import { type UploadedImage } from "./useUploadImage";
+import { useEffect } from "react";
+import { type UploadedImage } from "../ImageUploader/useUploadImage";
+import { useCanvasContext } from "../EditBar/CanvasContext";
 import { CanvasStyled } from "./ImageCanvas.styled";
 
 interface ImageCanvasProps {
   image: UploadedImage;
 }
 
-export default function ImageCanvas({ image }: ImageCanvasProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+export function ImageCanvas({ image }: ImageCanvasProps) {
+  const canvasRef = useCanvasContext();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -28,6 +29,8 @@ export default function ImageCanvas({ image }: ImageCanvasProps) {
         rgba[i * 4 + 3] = 255;
       }
       ctx.putImageData(pixels, 0, 0);
+    } else if (image.type === "cropped") {
+      // Canvas already has the correct pixels painted by useCrop.apply — no repaint needed.
     } else {
       const img = new Image();
       img.onload = () => {
@@ -37,7 +40,7 @@ export default function ImageCanvas({ image }: ImageCanvasProps) {
       };
       img.src = image.dataUrl;
     }
-  }, [image]);
+  }, [image, canvasRef]);
 
   return <CanvasStyled ref={canvasRef} />;
 }
