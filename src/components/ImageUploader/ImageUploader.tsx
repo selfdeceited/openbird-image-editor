@@ -50,7 +50,7 @@ export function ImageUploader({ onUpload }: ImageUploaderProps) {
       <input
         ref={inputRef}
         type="file"
-        accept={`image/*, ${acceptInputType}`}
+        accept={acceptInputType}
         style={{ display: "none" }}
         onChange={handleChange}
       />

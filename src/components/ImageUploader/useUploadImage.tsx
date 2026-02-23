@@ -7,8 +7,10 @@ import LibRaw, {
 import { RAW_EXTENSIONS } from "../../lib/rawExtensions";
 import type { FileMetadata } from "../Metadata/Metadata";
 
-const options: LibRawOptions = {
-  bright: 1.0, // -b <float> : brightness
+export const DEFAULT_BRIGHT = 1.0;
+
+export const baseLibRawOptions: LibRawOptions = {
+  bright: DEFAULT_BRIGHT, // -b <float> : brightness
   threshold: 0.0, // -n <float> : wavelet denoise threshold
   autoBrightThr: 0.01, // portion of clipped pixels for auto-brightening
   adjustMaximumThr: 0.75, // auto-adjust max if channel overflow above threshold
@@ -57,6 +59,7 @@ export type UploadedImage = {
   rawImageData: RawImageData;
   rawMetadata: Metadata;
   fileMetadata: FileMetadata;
+  rawBuffer: Uint8Array;
   state: "initial" | "raw edit" | "image edit" | "completed";
   name: string;
 };
@@ -73,15 +76,19 @@ function isRawFile(file: File): boolean {
 async function decodeRawFile(file: File): Promise<{
   rawImageData: RawImageData;
   rawMetadata: Metadata;
+  rawBuffer: Uint8Array;
 }> {
   const buffer = await file.arrayBuffer();
+  const rawBuffer = new Uint8Array(buffer);
   const raw = new LibRaw();
-  await raw.open(new Uint8Array(buffer), options);
+  // LibRaw transfers (detaches) the ArrayBuffer, so pass a copy to keep rawBuffer intact.
+  await raw.open(rawBuffer.slice(), baseLibRawOptions);
   const rawMetadata = await raw.metadata();
   const rawImageData = await raw.imageData();
   return {
     rawImageData,
     rawMetadata,
+    rawBuffer,
   };
 }
 
@@ -94,10 +101,11 @@ export function useUploadImage({ onUpload }: UseUploadImageProps) {
     setError(null);
     try {
       if (isRawFile(f)) {
-        const { rawImageData, rawMetadata } = await decodeRawFile(f);
+        const { rawImageData, rawMetadata, rawBuffer } = await decodeRawFile(f);
         onUpload({
           rawImageData,
           rawMetadata,
+          rawBuffer,
           name: f.name,
           fileMetadata: { lastModified: f.lastModified },
           state: "initial",

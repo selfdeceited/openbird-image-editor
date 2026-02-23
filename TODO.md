@@ -1,8 +1,10 @@
- - [ ] select aspect ratio when doing the crop
+ - [ ] consider doing 'fast' raw changes with previews and lower quality
+ - [ ] implement contrast adjustment
+ - [ ] do the 'two-stage' edit: raw image by wasm and later canvas manipulations
+  Raw image changes will be passed to state as byte array directly on each e.g. brighness adjsustment. The canvas changes will be preserved as the set of pre-selected edits (redux?) to be applied afterwards.
  - [ ] fix wrong date setting with built-in editor
  - [ ] fetch location metadata from EXIF
  - [ ] implement image rotation
- - [ ] implement brightness and contrast adjustment
  - [ ] implement shadow and highlight adjustments
  - [ ] control noise reduction
  - [ ] add author signature

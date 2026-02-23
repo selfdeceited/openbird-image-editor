@@ -4,6 +4,7 @@ import { CanvasContext } from "./CanvasContext";
 import { useCrop } from "./Crop/useCrop";
 import { CropTool } from "./Crop/CropTool";
 import { CropToolbar, type AspectRatio } from "./Crop/CropToolbar";
+import { RawEditBar } from "./RawEditBar/RawEditBar";
 import { ImageCanvas } from "../ImageCanvas/ImageCanvas";
 import {
   ToolbarRowStyled,
@@ -41,6 +42,7 @@ export function EditBar({ image, onCanvasReset }: EditBarProps) {
 
   return (
     <CanvasContext value={canvasRef}>
+      <RawEditBar image={image} onImageChange={onCanvasReset} />
       <CanvasWrapperStyled>
         <ImageCanvas image={image} />
         {isActive && (
