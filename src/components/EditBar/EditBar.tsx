@@ -1,9 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { type UploadedImage } from "../ImageUploader/useUploadImage";
 import { CanvasContext } from "./CanvasContext";
 import { useCrop } from "./Crop/useCrop";
 import { CropTool } from "./Crop/CropTool";
-import { CropToolbar } from "./Crop/CropToolbar";
+import { CropToolbar, type AspectRatio } from "./Crop/CropToolbar";
 import { ImageCanvas } from "../ImageCanvas/ImageCanvas";
 import {
   ToolbarRowStyled,
@@ -21,6 +21,7 @@ export function EditBar({ image, onApply }: EditBarProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const originalRef = useRef<UploadedImage>(image);
   const isModified = image !== originalRef.current;
+  const [aspectRatio, setAspectRatio] = useState<AspectRatio>(null);
 
   const { isActive, canApply, activate, cancel, apply, onCropChange } =
     useCrop({ image, onApply, canvasRef });
@@ -29,7 +30,7 @@ export function EditBar({ image, onApply }: EditBarProps) {
     <CanvasContext value={canvasRef}>
       <CanvasWrapperStyled>
         <ImageCanvas image={image} />
-        {isActive && <CropTool onCropChange={onCropChange} />}
+        {isActive && <CropTool onCropChange={onCropChange} aspectRatio={aspectRatio} />}
       </CanvasWrapperStyled>
       {!isActive && (
         <ToolbarRowStyled>
@@ -42,7 +43,13 @@ export function EditBar({ image, onApply }: EditBarProps) {
         </ToolbarRowStyled>
       )}
       {isActive && (
-        <CropToolbar onApply={apply} onCancel={cancel} canApply={canApply} />
+        <CropToolbar
+          onApply={apply}
+          onCancel={cancel}
+          canApply={canApply}
+          aspectRatio={aspectRatio}
+          onAspectRatioChange={setAspectRatio}
+        />
       )}
     </CanvasContext>
   );
