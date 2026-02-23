@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ImageUploader } from "./components/ImageUploader/ImageUploader";
 import { EditBar } from "./components/EditBar/EditBar";
-import { RawMetadata } from "./components/RawMetadata/RawMetadata";
+import { Metadata } from "./components/Metadata/Metadata";
 import { type UploadedImage } from "./components/ImageUploader/useUploadImage";
 import {
   ContainerStyled,
@@ -22,9 +22,14 @@ export function App() {
       {image && (
         <PreviewStyled>
           <FileNameStyled>{image.name}</FileNameStyled>
-          <EditBar image={image} onApply={setImage} />
+          <EditBar image={image} onCanvasReset={setImage} />
 
-          {image.metadata && <RawMetadata metadata={image.metadata} />}
+          {
+            <Metadata
+              rawMetadata={image.rawMetadata}
+              fileMetadata={image.fileMetadata}
+            />
+          }
         </PreviewStyled>
       )}
     </ContainerStyled>

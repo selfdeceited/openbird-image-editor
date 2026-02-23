@@ -5,6 +5,7 @@ import LibRaw, {
   type RawImageData,
 } from "libraw-wasm";
 import { RAW_EXTENSIONS } from "../../lib/rawExtensions";
+import type { FileMetadata } from "../Metadata/Metadata";
 
 const options: LibRawOptions = {
   bright: 1.0, // -b <float> : brightness
@@ -52,10 +53,13 @@ const options: LibRawOptions = {
   darkFrame: null, // -K <file> : file with dark frame (16-bit PGM)
 };
 
-export type UploadedImage =
-  | { type: "raw"; imageData: RawImageData; metadata: Metadata; name: string }
-  | { type: "image"; dataUrl: string; metadata: Metadata | null; name: string }
-  | { type: "cropped"; metadata: Metadata | null; name: string };
+export type UploadedImage = {
+  rawImageData: RawImageData;
+  rawMetadata: Metadata;
+  fileMetadata: FileMetadata;
+  state: "initial" | "raw edit" | "image edit" | "completed";
+  name: string;
+};
 
 interface UseUploadImageProps {
   onUpload: (image: UploadedImage) => void;
@@ -66,30 +70,19 @@ function isRawFile(file: File): boolean {
   return RAW_EXTENSIONS.has(ext);
 }
 
-async function decodeRawFile(
-  file: File,
-): Promise<{ imageData: RawImageData; metadata: Metadata }> {
+async function decodeRawFile(file: File): Promise<{
+  rawImageData: RawImageData;
+  rawMetadata: Metadata;
+}> {
   const buffer = await file.arrayBuffer();
   const raw = new LibRaw();
   await raw.open(new Uint8Array(buffer), options);
-  const metadata = await raw.metadata();
-  const imageData = await raw.imageData();
-  console.log({ metadata });
-  console.log(file.lastModified);
-  return { imageData, metadata };
-}
-
-function imageFileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result;
-      if (typeof result === "string") resolve(result);
-      else reject(new Error("Failed to read file"));
-    };
-    reader.onerror = () => reject(new Error("FileReader error"));
-    reader.readAsDataURL(file);
-  });
+  const rawMetadata = await raw.metadata();
+  const rawImageData = await raw.imageData();
+  return {
+    rawImageData,
+    rawMetadata,
+  };
 }
 
 export function useUploadImage({ onUpload }: UseUploadImageProps) {
@@ -101,11 +94,14 @@ export function useUploadImage({ onUpload }: UseUploadImageProps) {
     setError(null);
     try {
       if (isRawFile(f)) {
-        const { imageData, metadata } = await decodeRawFile(f);
-        onUpload({ type: "raw", imageData, metadata, name: f.name });
-      } else {
-        const dataUrl = await imageFileToDataUrl(f);
-        onUpload({ type: "image", dataUrl, name: f.name, metadata: null });
+        const { rawImageData, rawMetadata } = await decodeRawFile(f);
+        onUpload({
+          rawImageData,
+          rawMetadata,
+          name: f.name,
+          fileMetadata: { lastModified: f.lastModified },
+          state: "initial",
+        });
       }
     } catch (err) {
       console.error(err);
