@@ -39,13 +39,6 @@ const FIELDS: Field[] = [
     label: "Date",
     key: "timestamp",
     format: (v) => (v as Date).toLocaleString(),
-    component: ({ rawMetadata, fileMetadata }) => (
-      <div>
-        <button>
-          Use date from image metadata ({fileMetadata.lastModified})
-        </button>
-      </div>
-    ),
   },
   { label: "Artist", key: "artist" },
   { label: "Description", key: "desc" },
@@ -56,13 +49,13 @@ const FIELDS: Field[] = [
   },
 ];
 
-export function Metadata({ rawMetadata, fileMetadata }: RawMetadataProps) {
+export function Metadata({ rawMetadata }: RawMetadataProps) {
   return (
     <>
       <h4>Review and fix metadata</h4>
       <MetadataTableStyled>
         <tbody>
-          {FIELDS.map(({ label, key, format, component }) => {
+          {FIELDS.map(({ label, key, format }) => {
             const value = rawMetadata[key];
             if (!value && value !== 0) return null;
             const display = format ? format(value, rawMetadata) : String(value);

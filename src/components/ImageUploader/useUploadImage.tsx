@@ -8,18 +8,23 @@ import { RAW_EXTENSIONS } from "../../lib/rawExtensions";
 import type { FileMetadata } from "../Metadata/Metadata";
 
 export const DEFAULT_BRIGHT = 1.0;
+export const DEFAULT_HIGHLIGHT = 0;
+export const DEFAULT_THRESHOLD = 0.0;
+export const DEFAULT_EXP_SHIFT = 1.0;
+export const DEFAULT_EXP_PRESER = 0.0;
 
 export const baseLibRawOptions: LibRawOptions = {
   bright: DEFAULT_BRIGHT, // -b <float> : brightness
-  threshold: 0.0, // -n <float> : wavelet denoise threshold
+  threshold: DEFAULT_THRESHOLD, // -n <float> : wavelet denoise threshold
   autoBrightThr: 0.01, // portion of clipped pixels for auto-brightening
   adjustMaximumThr: 0.75, // auto-adjust max if channel overflow above threshold
-  expShift: 1.0, // exposure shift in linear scale (requires expCorrec=1)
-  expPreser: 0.0, // preserve highlights when expShift>1 (0..1)
+  expShift: DEFAULT_EXP_SHIFT, // exposure shift in linear scale (requires expCorrec=1)
+  expPreser: DEFAULT_EXP_PRESER, // preserve highlights when expShift>1 (0..1)
 
+  // todo: consider for 'preload' / 'fast mode'
   halfSize: false, // -h  : output at 1/2 size
   fourColorRgb: true, // -f  : separate interpolation for two green channels
-  highlight: 0, // -H  : highlight mode (0..9)
+  highlight: DEFAULT_HIGHLIGHT, // -H  : highlight mode (0..9)
   useAutoWb: false, // -a  : auto white balance
   useCameraWb: true, // -w  : camera's recorded WB
   useCameraMatrix: 1, // +M/-M : color profile usage (0=off,1=on if WB,3=always)

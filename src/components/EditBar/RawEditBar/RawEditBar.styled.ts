@@ -18,9 +18,12 @@ export const SliderRowStyled = styled.div`
 `;
 
 export const LabelStyled = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 0.8rem;
   color: #aaa;
-  min-width: 70px;
+  min-width: 80px;
 `;
 
 export const SliderStyled = styled.input`

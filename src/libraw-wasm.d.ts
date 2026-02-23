@@ -1,4 +1,5 @@
-declare module 'libraw-wasm' {
+// from https://github.com/ybouane/LibRaw-Wasm/blob/main/dist/index.d.ts
+declare module "libraw-wasm" {
   export interface LibRawOptions {
     bright?: number;
     threshold?: number;
@@ -80,7 +81,7 @@ declare module 'libraw-wasm' {
     data: Uint8Array;
     width: number;
     height: number;
-    format: 'jpeg' | 'bitmap' | 'unknown';
+    format: "jpeg" | "bitmap" | "unknown";
   }
 
   export default class LibRaw {
