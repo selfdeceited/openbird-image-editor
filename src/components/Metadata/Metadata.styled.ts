@@ -1,24 +1,20 @@
 import styled from "styled-components";
 
-export const MetadataTableStyled = styled.table`
+export const MetadataContainerStyled = styled.div`
   margin-top: 16px;
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
 `;
 
-export const MetadataRowStyled = styled.tr`
-  border-bottom: 1px solid #2a2a2a;
+export const MetadataLayoutStyled = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
 `;
 
-export const MetadataLabelStyled = styled.td`
-  color: #aaa;
-  padding: 6px 12px 6px 0;
-  white-space: nowrap;
-  width: 1%;
-`;
-
-export const MetadataValueStyled = styled.td`
-  color: #000;
-  padding: 6px 0;
+export const MetadataReadonlyCardStyled = styled.div`
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 4px 10px;
 `;

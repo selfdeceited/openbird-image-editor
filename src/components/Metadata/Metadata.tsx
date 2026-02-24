@@ -1,78 +1,74 @@
+import { useState, type FC } from "react";
 import { type Metadata as RawMetadata } from "libraw-wasm";
 import {
-  MetadataTableStyled,
-  MetadataRowStyled,
-  MetadataLabelStyled,
-  MetadataValueStyled,
+  MetadataContainerStyled,
+  MetadataLayoutStyled,
+  MetadataReadonlyCardStyled,
 } from "./Metadata.styled";
+import { MetadataCamera } from "./fields/MetadataCamera";
+import { MetadataISO } from "./fields/MetadataISO";
+import { MetadataShutter } from "./fields/MetadataShutter";
+import { MetadataAperture } from "./fields/MetadataAperture";
+import { MetadataFocalLength } from "./fields/MetadataFocalLength";
+import { MetadataDate } from "./fields/MetadataDate";
+import { MetadataArtist } from "./fields/MetadataArtist";
+import { MetadataDescription } from "./fields/MetadataDescription";
+import { MetadataResolution } from "./fields/MetadataResolution";
 
 export interface FileMetadata {
   lastModified: number;
 }
 
-interface RawMetadataProps {
+interface MetadataProps {
   rawMetadata: RawMetadata;
   fileMetadata: FileMetadata;
 }
 
-type Field = {
-  label: string;
-  key: keyof RawMetadata;
-  format?: (value: unknown, meta: RawMetadata) => string;
-};
+export const Metadata: FC<MetadataProps> = ({ rawMetadata, fileMetadata }) => {
+  const [artist, setArtist] = useState(rawMetadata.artist ?? "");
+  const [desc, setDesc] = useState(rawMetadata.desc ?? "");
 
-const FIELDS: Field[] = [
-  {
-    label: "Camera",
-    key: "camera_make",
-    format: (v, meta) => `${v} ${meta.camera_model}`,
-  },
-  { label: "ISO", key: "iso_speed" },
-  {
-    label: "Shutter",
-    key: "shutter",
-    format: (v) => `1/${Math.round(1 / (v as number))}s`,
-  },
-  { label: "Aperture", key: "aperture", format: (v) => `f/${v}` },
-  { label: "Focal length", key: "focal_len", format: (v) => `${v}mm` },
-  {
-    label: "Date",
-    key: "timestamp",
-    format: (v) => (v as Date).toLocaleString(),
-  },
-  { label: "Artist", key: "artist" },
-  { label: "Description", key: "desc" },
-  {
-    label: "Resolution",
-    key: "width",
-    format: (_, meta) => `${meta.width} × ${meta.height}`,
-  },
-];
-
-export function Metadata({ rawMetadata }: RawMetadataProps) {
   return (
     <>
       <h4>Review and fix metadata</h4>
-      <MetadataTableStyled>
-        <tbody>
-          {FIELDS.map(({ label, key, format }) => {
-            const value = rawMetadata[key];
-            if (!value && value !== 0) return null;
-            const display = format ? format(value, rawMetadata) : String(value);
-            return (
-              <MetadataRowStyled key={key}>
-                <MetadataLabelStyled>{label}</MetadataLabelStyled>
-                <MetadataValueStyled>{display}</MetadataValueStyled>
-                <MetadataValueStyled>
-                  {/* todo: make it not a table but separate components with action bar
-                    not this shit: () => component({ rawMetadata, fileMetadata })
-                    */}
-                </MetadataValueStyled>
-              </MetadataRowStyled>
-            );
-          })}
-        </tbody>
-      </MetadataTableStyled>
+      <MetadataContainerStyled>
+        <MetadataLayoutStyled>
+          <div>
+            <MetadataArtist value={artist} onChange={setArtist} />
+            <MetadataDescription value={desc} onChange={setDesc} />
+            <MetadataDate
+              timestamp={rawMetadata.timestamp}
+              lastModified={fileMetadata.lastModified}
+            />
+          </div>
+          <MetadataReadonlyCardStyled>
+            {(rawMetadata.camera_make || rawMetadata.camera_model) && (
+              <MetadataCamera
+                camera_make={rawMetadata.camera_make}
+                camera_model={rawMetadata.camera_model}
+              />
+            )}
+            {!!rawMetadata.iso_speed && (
+              <MetadataISO iso_speed={rawMetadata.iso_speed} />
+            )}
+            {!!rawMetadata.shutter && (
+              <MetadataShutter shutter={rawMetadata.shutter} />
+            )}
+            {!!rawMetadata.aperture && (
+              <MetadataAperture aperture={rawMetadata.aperture} />
+            )}
+            {!!rawMetadata.focal_len && (
+              <MetadataFocalLength focal_len={rawMetadata.focal_len} />
+            )}
+            {!!(rawMetadata.width && rawMetadata.height) && (
+              <MetadataResolution
+                width={rawMetadata.width}
+                height={rawMetadata.height}
+              />
+            )}
+          </MetadataReadonlyCardStyled>
+        </MetadataLayoutStyled>
+      </MetadataContainerStyled>
     </>
   );
-}
+};
