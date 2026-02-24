@@ -1,14 +1,14 @@
- - [ ] consider doing 'fast' raw changes with previews and lower quality
+ - [ ] drag-and-drop cropped area, add rotation to cropped area
  - [ ] do the 'two-stage' edit: raw image by wasm and later canvas manipulations
-  Raw image changes will be passed to state as byte array directly on each e.g. brighness adjsustment. The canvas changes will be preserved as the set of pre-selected edits (redux?) to be applied afterwards.
- - [ ] contrast adjustment
- - [ ] drag-and-drop cropped area
+  The crop-rotate changes will be preserved and applied after raw edits.
+ - [ ] contrast and shadows adjustment
  - [ ] fix chromatic aberration
+ - [ ] add gamma correction
+ - [ ] second attempt for 'fast' changes with previews
  - [ ] fetch location metadata from EXIF
- - [ ] implement image rotation
  - [ ] zoom on specific place while making raw edits (checking details)
  - [ ] FBDD denoise
  - [ ] add author signature (pre-loaded once per session)
- - [ ] button 'do the best' with optional small prompt what to fix (e.g. 'more focus on highlights')
  - [ ] download result in preferred format
  - [ ] 'clean' photo to select another one
+ - [ ] button 'do the best' with optional small prompt what to fix (e.g. 'more focus on highlights')
