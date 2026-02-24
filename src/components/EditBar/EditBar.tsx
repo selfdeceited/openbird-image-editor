@@ -11,6 +11,8 @@ import {
   CropButtonStyled,
   ResetButtonStyled,
   CanvasWrapperStyled,
+  TransformingOverlayStyled,
+  SpinnerStyled,
 } from "./EditBar.styled";
 
 interface EditBarProps {
@@ -20,6 +22,7 @@ interface EditBarProps {
 
 export function EditBar({ image, onCanvasReset }: EditBarProps) {
   const [state, setState] = useState<typeof image.state>(image.state);
+  const [isDecoding, setIsDecoding] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isModified = state === "image edit";
   // todo: move aspectRatio to croptoolbar
@@ -42,11 +45,21 @@ export function EditBar({ image, onCanvasReset }: EditBarProps) {
 
   return (
     <CanvasContext value={canvasRef}>
-      <RawEditBar image={image} onImageChange={onCanvasReset} />
+      <RawEditBar
+        image={image}
+        onImageChange={onCanvasReset}
+        onDecodingChange={setIsDecoding}
+      />
       <CanvasWrapperStyled>
         <ImageCanvas image={image} />
         {isActive && (
           <CropTool onCropChange={handleCropChange} aspectRatio={aspectRatio} />
+        )}
+        {isDecoding && (
+          <TransformingOverlayStyled>
+            <SpinnerStyled />
+            Transforming…
+          </TransformingOverlayStyled>
         )}
       </CanvasWrapperStyled>
       {!isActive && (
