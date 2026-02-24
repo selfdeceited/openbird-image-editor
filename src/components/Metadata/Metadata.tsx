@@ -1,6 +1,7 @@
 import { useState, type FC } from "react";
 import { type Metadata as RawMetadata } from "libraw-wasm";
 import {
+  BirdCardWrapperStyled,
   MetadataContainerStyled,
   MetadataLayoutStyled,
   MetadataReadonlyCardStyled,
@@ -14,6 +15,8 @@ import { MetadataDate } from "./fields/MetadataDate";
 import { MetadataArtist } from "./fields/MetadataArtist";
 import { MetadataDescription } from "./fields/MetadataDescription";
 import { MetadataResolution } from "./fields/MetadataResolution";
+import { BirdCard } from "./fields/BirdCard";
+import { type BirdSpecies } from "./fields/useBirdSpecies";
 
 export interface FileMetadata {
   lastModified: number;
@@ -27,6 +30,7 @@ interface MetadataProps {
 export const Metadata: FC<MetadataProps> = ({ rawMetadata, fileMetadata }) => {
   const [artist, setArtist] = useState(rawMetadata.artist ?? "");
   const [desc, setDesc] = useState(rawMetadata.desc ?? "");
+  const [selectedBird, setSelectedBird] = useState<BirdSpecies | null>(null);
 
   return (
     <>
@@ -35,10 +39,14 @@ export const Metadata: FC<MetadataProps> = ({ rawMetadata, fileMetadata }) => {
         <MetadataLayoutStyled>
           <div>
             <MetadataArtist value={artist} onChange={setArtist} />
-            <MetadataDescription value={desc} onChange={setDesc} />
             <MetadataDate
               timestamp={rawMetadata.timestamp}
               lastModified={fileMetadata.lastModified}
+            />
+            <MetadataDescription
+              value={desc}
+              onChange={setDesc}
+              onSelect={setSelectedBird}
             />
           </div>
           <MetadataReadonlyCardStyled>
@@ -68,6 +76,11 @@ export const Metadata: FC<MetadataProps> = ({ rawMetadata, fileMetadata }) => {
             )}
           </MetadataReadonlyCardStyled>
         </MetadataLayoutStyled>
+        {selectedBird && (
+          <BirdCardWrapperStyled>
+            <BirdCard species={selectedBird} />
+          </BirdCardWrapperStyled>
+        )}
       </MetadataContainerStyled>
     </>
   );

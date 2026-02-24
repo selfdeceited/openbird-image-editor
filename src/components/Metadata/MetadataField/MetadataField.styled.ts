@@ -21,6 +21,8 @@ export const MetadataLabelStyled = styled.span`
 
 export const MetadataValueStyled = styled.span`
   color: #000;
+  flex: 1;
+  min-width: 0;
 `;
 
 export const MetadataInputStyled = styled.input`

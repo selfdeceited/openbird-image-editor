@@ -12,6 +12,10 @@ export const MetadataLayoutStyled = styled.div`
   align-items: start;
 `;
 
+export const BirdCardWrapperStyled = styled.div`
+  margin-top: 12px;
+`;
+
 export const MetadataReadonlyCardStyled = styled.div`
   background: rgba(0, 0, 0, 0.04);
   border: 1px solid #2a2a2a;
