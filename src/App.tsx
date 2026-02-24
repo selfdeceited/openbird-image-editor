@@ -6,6 +6,8 @@ import { type UploadedImage } from "./components/ImageUploader/useUploadImage";
 import {
   ContainerStyled,
   PreviewStyled,
+  PreviewEditorStyled,
+  PreviewMetadataStyled,
   FileNameStyled,
   HeaderStyled,
 } from "./App.styled";
@@ -21,15 +23,16 @@ export function App() {
       {!image && <ImageUploader onUpload={setImage} />}
       {image && (
         <PreviewStyled>
-          <FileNameStyled>{image.name}</FileNameStyled>
-          <EditBar image={image} onCanvasReset={setImage} />
-
-          {
+          <PreviewEditorStyled>
+            <FileNameStyled>{image.name}</FileNameStyled>
+            <EditBar image={image} onCanvasReset={setImage} />
+          </PreviewEditorStyled>
+          <PreviewMetadataStyled>
             <Metadata
               rawMetadata={image.rawMetadata}
               fileMetadata={image.fileMetadata}
             />
-          }
+          </PreviewMetadataStyled>
         </PreviewStyled>
       )}
     </ContainerStyled>

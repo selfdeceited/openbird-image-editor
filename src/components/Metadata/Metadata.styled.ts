@@ -3,13 +3,12 @@ import styled from "styled-components";
 export const MetadataContainerStyled = styled.div`
   margin-top: 16px;
   width: 100%;
+  padding: 0px 40px 0px 40px;
 `;
 
 export const MetadataLayoutStyled = styled.div`
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px;
-  align-items: start;
+  display: flex;
+  gap: 50px;
 `;
 
 export const BirdCardWrapperStyled = styled.div`

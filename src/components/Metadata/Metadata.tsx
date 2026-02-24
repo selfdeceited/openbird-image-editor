@@ -33,55 +33,53 @@ export const Metadata: FC<MetadataProps> = ({ rawMetadata, fileMetadata }) => {
   const [selectedBird, setSelectedBird] = useState<BirdSpecies | null>(null);
 
   return (
-    <>
+    <MetadataContainerStyled>
       <h4>Review and fix metadata</h4>
-      <MetadataContainerStyled>
-        <MetadataLayoutStyled>
-          <div>
-            <MetadataArtist value={artist} onChange={setArtist} />
-            <MetadataDate
-              timestamp={rawMetadata.timestamp}
-              lastModified={fileMetadata.lastModified}
+      <MetadataLayoutStyled>
+        <div>
+          <MetadataArtist value={artist} onChange={setArtist} />
+          <MetadataDate
+            timestamp={rawMetadata.timestamp}
+            lastModified={fileMetadata.lastModified}
+          />
+          <MetadataDescription
+            value={desc}
+            onChange={setDesc}
+            onSelect={setSelectedBird}
+          />
+        </div>
+        <MetadataReadonlyCardStyled>
+          {(rawMetadata.camera_make || rawMetadata.camera_model) && (
+            <MetadataCamera
+              camera_make={rawMetadata.camera_make}
+              camera_model={rawMetadata.camera_model}
             />
-            <MetadataDescription
-              value={desc}
-              onChange={setDesc}
-              onSelect={setSelectedBird}
+          )}
+          {!!rawMetadata.iso_speed && (
+            <MetadataISO iso_speed={rawMetadata.iso_speed} />
+          )}
+          {!!rawMetadata.shutter && (
+            <MetadataShutter shutter={rawMetadata.shutter} />
+          )}
+          {!!rawMetadata.aperture && (
+            <MetadataAperture aperture={rawMetadata.aperture} />
+          )}
+          {!!rawMetadata.focal_len && (
+            <MetadataFocalLength focal_len={rawMetadata.focal_len} />
+          )}
+          {!!(rawMetadata.width && rawMetadata.height) && (
+            <MetadataResolution
+              width={rawMetadata.width}
+              height={rawMetadata.height}
             />
-          </div>
-          <MetadataReadonlyCardStyled>
-            {(rawMetadata.camera_make || rawMetadata.camera_model) && (
-              <MetadataCamera
-                camera_make={rawMetadata.camera_make}
-                camera_model={rawMetadata.camera_model}
-              />
-            )}
-            {!!rawMetadata.iso_speed && (
-              <MetadataISO iso_speed={rawMetadata.iso_speed} />
-            )}
-            {!!rawMetadata.shutter && (
-              <MetadataShutter shutter={rawMetadata.shutter} />
-            )}
-            {!!rawMetadata.aperture && (
-              <MetadataAperture aperture={rawMetadata.aperture} />
-            )}
-            {!!rawMetadata.focal_len && (
-              <MetadataFocalLength focal_len={rawMetadata.focal_len} />
-            )}
-            {!!(rawMetadata.width && rawMetadata.height) && (
-              <MetadataResolution
-                width={rawMetadata.width}
-                height={rawMetadata.height}
-              />
-            )}
-          </MetadataReadonlyCardStyled>
-        </MetadataLayoutStyled>
-        {selectedBird && (
-          <BirdCardWrapperStyled>
-            <BirdCard species={selectedBird} />
-          </BirdCardWrapperStyled>
-        )}
-      </MetadataContainerStyled>
-    </>
+          )}
+        </MetadataReadonlyCardStyled>
+      </MetadataLayoutStyled>
+      {selectedBird && (
+        <BirdCardWrapperStyled>
+          <BirdCard species={selectedBird} />
+        </BirdCardWrapperStyled>
+      )}
+    </MetadataContainerStyled>
   );
 };
